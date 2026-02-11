@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { EmptyState } from "@gaqno-development/frontcore/components/ui";
 
 interface PlaceholderPageProps {
   title: string;
@@ -7,10 +8,10 @@ interface PlaceholderPageProps {
 
 export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
   return (
-    <div className="rounded-lg border bg-card p-6 text-card-foreground">
-      <p className="text-muted-foreground">
-        {description ?? `${title} — content coming soon.`}
-      </p>
-    </div>
+    <EmptyState
+      title={title}
+      description={description ?? `${title} — content coming soon.`}
+      size="md"
+    />
   );
 }
