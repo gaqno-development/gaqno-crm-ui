@@ -1,7 +1,11 @@
-import { AuthProvider, QueryProvider, TenantProvider } from '@gaqno-development/frontcore';
-import { SectionWithSubNav } from '@gaqno-development/frontcore/components';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import React from 'react';
+import {
+  AuthProvider,
+  QueryProvider,
+  TenantProvider,
+} from "@gaqno-development/frontcore";
+import { SectionWithSubNav } from "@gaqno-development/frontcore/components";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import React from "react";
 import {
   DASHBOARD_BASE,
   DASHBOARD_DEFAULT,
@@ -34,13 +38,13 @@ import {
   SETTINGS_DEFAULT,
   SETTINGS_CHILDREN,
   SECTION_CONFIG,
-} from './config/sections';
+} from "./config/sections";
 import {
   OverviewPage,
   KpisPage,
   ActivityFeedPage,
   AlertsPage,
-} from './pages/dashboard';
+} from "./pages/dashboard";
 import {
   LeadsPage,
   OpportunitiesPage,
@@ -48,33 +52,33 @@ import {
   QuotesPage,
   ContractsPage,
   OrdersPage,
-} from './pages/sales';
+} from "./pages/sales";
 import {
   AccountsPage,
   ContactsPage,
   ProfilesPage,
   InteractionHistoryPage,
   SupportTicketsPage,
-} from './pages/customers';
+} from "./pages/customers";
 import {
   ProductsPage,
   CategoriesPage,
   StockLevelsPage,
   WarehousesPage,
   SuppliersPage,
-} from './pages/inventory';
+} from "./pages/inventory";
 import {
   OrderFulfillmentPage,
   ShippingPage,
   ReturnsPage,
   InvoicingPage,
-} from './pages/operations';
+} from "./pages/operations";
 import {
   InvoicesPage,
   PaymentsPage,
   PricingRulesPage,
   TaxesPage,
-} from './pages/finance';
+} from "./pages/finance";
 import {
   AnalyticsPage,
   SalesReportsPage,
@@ -82,28 +86,28 @@ import {
   InventoryReportsPage,
   FinancialReportsPage,
   CustomReportsPage,
-} from './pages/reports';
+} from "./pages/reports";
 import {
   WorkflowsPage,
   TriggersPage,
   WebhooksPage,
   IntegrationsPage,
-} from './pages/automation';
+} from "./pages/automation";
 import {
   UsersPage,
   PermissionsPage,
   TeamsPage,
   AuditLogsPage,
   SystemSettingsPage,
-} from './pages/administration';
+} from "./pages/administration";
 import {
   OrganizationPage,
   CustomFieldsPage,
   PipelinesPage,
   NotificationsPage,
   ApiKeysPage,
-} from './pages/settings';
-import { CRMPageLayout } from './layouts';
+} from "./pages/settings";
+import { CRMPageLayout } from "./layouts";
 
 const breadcrumb = SECTION_CONFIG.breadcrumbRoot;
 
@@ -116,12 +120,13 @@ function DashboardSection() {
       segmentToComponent={{
         overview: OverviewPage,
         kpis: KpisPage,
-        'activity-feed': ActivityFeedPage,
+        "activity-feed": ActivityFeedPage,
         alerts: AlertsPage,
       }}
       title="Dashboard"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -143,6 +148,7 @@ function SalesSection() {
       title="Sales"
       variant="horizontal"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -157,12 +163,13 @@ function CustomersSection() {
         accounts: AccountsPage,
         contacts: ContactsPage,
         profiles: ProfilesPage,
-        'interaction-history': InteractionHistoryPage,
-        'support-tickets': SupportTicketsPage,
+        "interaction-history": InteractionHistoryPage,
+        "support-tickets": SupportTicketsPage,
       }}
       title="Customers"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -176,13 +183,14 @@ function InventorySection() {
       segmentToComponent={{
         products: ProductsPage,
         categories: CategoriesPage,
-        'stock-levels': StockLevelsPage,
+        "stock-levels": StockLevelsPage,
         warehouses: WarehousesPage,
         suppliers: SuppliersPage,
       }}
       title="Inventory"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -194,7 +202,7 @@ function OperationsSection() {
       defaultSegment={OPERATIONS_DEFAULT}
       children={OPERATIONS_CHILDREN}
       segmentToComponent={{
-        'order-fulfillment': OrderFulfillmentPage,
+        "order-fulfillment": OrderFulfillmentPage,
         shipping: ShippingPage,
         returns: ReturnsPage,
         invoicing: InvoicingPage,
@@ -202,6 +210,7 @@ function OperationsSection() {
       title="Operations"
       variant="horizontal"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -215,12 +224,13 @@ function FinanceSection() {
       segmentToComponent={{
         invoices: InvoicesPage,
         payments: PaymentsPage,
-        'pricing-rules': PricingRulesPage,
+        "pricing-rules": PricingRulesPage,
         taxes: TaxesPage,
       }}
       title="Finance"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -233,15 +243,16 @@ function ReportsSection() {
       children={REPORTS_CHILDREN}
       segmentToComponent={{
         analytics: AnalyticsPage,
-        'sales-reports': SalesReportsPage,
-        'customer-insights': CustomerInsightsPage,
-        'inventory-reports': InventoryReportsPage,
-        'financial-reports': FinancialReportsPage,
-        'custom-reports': CustomReportsPage,
+        "sales-reports": SalesReportsPage,
+        "customer-insights": CustomerInsightsPage,
+        "inventory-reports": InventoryReportsPage,
+        "financial-reports": FinancialReportsPage,
+        "custom-reports": CustomReportsPage,
       }}
       title="Reports"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -261,6 +272,7 @@ function AutomationSection() {
       title="Automation"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -275,12 +287,13 @@ function AdministrationSection() {
         users: UsersPage,
         permissions: PermissionsPage,
         teams: TeamsPage,
-        'audit-logs': AuditLogsPage,
-        'system-settings': SystemSettingsPage,
+        "audit-logs": AuditLogsPage,
+        "system-settings": SystemSettingsPage,
       }}
       title="Administration"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -293,14 +306,15 @@ function SettingsSection() {
       children={SETTINGS_CHILDREN}
       segmentToComponent={{
         organization: OrganizationPage,
-        'custom-fields': CustomFieldsPage,
+        "custom-fields": CustomFieldsPage,
         pipelines: PipelinesPage,
         notifications: NotificationsPage,
-        'api-keys': ApiKeysPage,
+        "api-keys": ApiKeysPage,
       }}
       title="Settings"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
+      enableContentTransition
     />
   );
 }
@@ -308,28 +322,33 @@ function SettingsSection() {
 function CRMRouter() {
   const { pathname } = useLocation();
 
-  if (pathname === '/crm' || pathname === '/crm/') {
+  if (pathname === "/crm" || pathname === "/crm/") {
     return <Navigate to="/crm/dashboard" replace />;
   }
 
   let sectionContent: React.ReactNode = null;
-  if (pathname.startsWith('/crm/dashboard')) sectionContent = <DashboardSection />;
-  else if (pathname.startsWith('/crm/sales')) sectionContent = <SalesSection />;
-  else if (pathname.startsWith('/crm/customers')) sectionContent = <CustomersSection />;
-  else if (pathname.startsWith('/crm/inventory')) sectionContent = <InventorySection />;
-  else if (pathname.startsWith('/crm/operations')) sectionContent = <OperationsSection />;
-  else if (pathname.startsWith('/crm/finance')) sectionContent = <FinanceSection />;
-  else if (pathname.startsWith('/crm/reports')) sectionContent = <ReportsSection />;
-  else if (pathname.startsWith('/crm/automation')) sectionContent = <AutomationSection />;
-  else if (pathname.startsWith('/crm/administration')) sectionContent = <AdministrationSection />;
-  else if (pathname.startsWith('/crm/settings')) sectionContent = <SettingsSection />;
+  if (pathname.startsWith("/crm/dashboard"))
+    sectionContent = <DashboardSection />;
+  else if (pathname.startsWith("/crm/sales")) sectionContent = <SalesSection />;
+  else if (pathname.startsWith("/crm/customers"))
+    sectionContent = <CustomersSection />;
+  else if (pathname.startsWith("/crm/inventory"))
+    sectionContent = <InventorySection />;
+  else if (pathname.startsWith("/crm/operations"))
+    sectionContent = <OperationsSection />;
+  else if (pathname.startsWith("/crm/finance"))
+    sectionContent = <FinanceSection />;
+  else if (pathname.startsWith("/crm/reports"))
+    sectionContent = <ReportsSection />;
+  else if (pathname.startsWith("/crm/automation"))
+    sectionContent = <AutomationSection />;
+  else if (pathname.startsWith("/crm/administration"))
+    sectionContent = <AdministrationSection />;
+  else if (pathname.startsWith("/crm/settings"))
+    sectionContent = <SettingsSection />;
 
   if (sectionContent) {
-    return (
-      <CRMPageLayout title="CRM">
-        {sectionContent}
-      </CRMPageLayout>
-    );
+    return <CRMPageLayout title="CRM">{sectionContent}</CRMPageLayout>;
   }
 
   return (
