@@ -37,6 +37,9 @@ import {
   SETTINGS_BASE,
   SETTINGS_DEFAULT,
   SETTINGS_CHILDREN,
+  AI_MARKETING_BASE,
+  AI_MARKETING_DEFAULT,
+  AI_MARKETING_CHILDREN,
   SECTION_CONFIG,
 } from "./config/sections";
 import {
@@ -57,6 +60,7 @@ import {
   AccountsPage,
   ContactsPage,
   ProfilesPage,
+  AIContentPage,
   InteractionHistoryPage,
   SupportTicketsPage,
 } from "./pages/customers";
@@ -92,6 +96,7 @@ import {
   TriggersPage,
   WebhooksPage,
   IntegrationsPage,
+  AICampaignsPage,
 } from "./pages/automation";
 import {
   UsersPage,
@@ -107,6 +112,7 @@ import {
   NotificationsPage,
   ApiKeysPage,
 } from "./pages/settings";
+import { AIVideoPage, DistributionPage } from "./pages/ai-marketing";
 import { CRMPageLayout } from "./layouts";
 
 const breadcrumb = SECTION_CONFIG.breadcrumbRoot;
@@ -163,6 +169,7 @@ function CustomersSection() {
         accounts: AccountsPage,
         contacts: ContactsPage,
         profiles: ProfilesPage,
+        "ai-content": AIContentPage,
         "interaction-history": InteractionHistoryPage,
         "support-tickets": SupportTicketsPage,
       }}
@@ -265,6 +272,7 @@ function AutomationSection() {
       children={AUTOMATION_CHILDREN}
       segmentToComponent={{
         workflows: WorkflowsPage,
+        "ai-campaigns": AICampaignsPage,
         triggers: TriggersPage,
         webhooks: WebhooksPage,
         integrations: IntegrationsPage,
@@ -291,6 +299,24 @@ function AdministrationSection() {
         "system-settings": SystemSettingsPage,
       }}
       title="Administration"
+      variant="vertical"
+      breadcrumbRoot={breadcrumb}
+      enableContentTransition
+    />
+  );
+}
+
+function AIMarketingSection() {
+  return (
+    <SectionWithSubNav
+      basePath={AI_MARKETING_BASE}
+      defaultSegment={AI_MARKETING_DEFAULT}
+      children={AI_MARKETING_CHILDREN}
+      segmentToComponent={{
+        video: AIVideoPage,
+        distribution: DistributionPage,
+      }}
+      title="AI Marketing"
       variant="vertical"
       breadcrumbRoot={breadcrumb}
       enableContentTransition
@@ -342,6 +368,8 @@ function CRMRouter() {
     sectionContent = <ReportsSection />;
   else if (pathname.startsWith("/crm/automation"))
     sectionContent = <AutomationSection />;
+  else if (pathname.startsWith("/crm/ai-marketing"))
+    sectionContent = <AIMarketingSection />;
   else if (pathname.startsWith("/crm/administration"))
     sectionContent = <AdministrationSection />;
   else if (pathname.startsWith("/crm/settings"))

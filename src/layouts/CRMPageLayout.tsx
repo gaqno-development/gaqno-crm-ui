@@ -1,7 +1,11 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Tabs, TabsList, TabsTrigger } from '@gaqno-development/frontcore/components/ui';
-import type { IconComponent } from '@gaqno-development/frontcore/utils';
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@gaqno-development/frontcore/components/ui";
+import type { IconComponent } from "@gaqno-development/frontcore/utils";
 import {
   LayoutDashboard,
   TrendingUp,
@@ -10,8 +14,13 @@ import {
   DollarSign,
   BarChart3,
   ShieldCheck,
-} from 'lucide-react';
-import { GearIcon, TargetIcon, UsersIcon } from '@gaqno-development/frontcore/components/icons';
+  Sparkles,
+} from "lucide-react";
+import {
+  GearIcon,
+  TargetIcon,
+  UsersIcon,
+} from "@gaqno-development/frontcore/components/icons";
 
 export interface CRMPageLayoutTab {
   id: string;
@@ -21,30 +30,82 @@ export interface CRMPageLayoutTab {
 }
 
 const CRM_SECTION_TABS = [
-  { id: 'dashboard', label: 'Dashboard', href: '/crm/dashboard/overview', icon: LayoutDashboard },
-  { id: 'sales', label: 'Sales', href: '/crm/sales/leads', icon: TrendingUp },
-  { id: 'customers', label: 'Customers', href: '/crm/customers/accounts', icon: UsersIcon },
-  { id: 'inventory', label: 'Inventory', href: '/crm/inventory/products', icon: Package },
-  { id: 'operations', label: 'Operations', href: '/crm/operations/order-fulfillment', icon: ClipboardList },
-  { id: 'finance', label: 'Finance', href: '/crm/finance/invoices', icon: DollarSign },
-  { id: 'reports', label: 'Reports', href: '/crm/reports/analytics', icon: BarChart3 },
-  { id: 'automation', label: 'Automation', href: '/crm/automation/workflows', icon: TargetIcon },
-  { id: 'administration', label: 'Administration', href: '/crm/administration/users', icon: ShieldCheck },
-  { id: 'settings', label: 'Settings', href: '/crm/settings/organization', icon: GearIcon },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    href: "/crm/dashboard/overview",
+    icon: LayoutDashboard,
+  },
+  { id: "sales", label: "Sales", href: "/crm/sales/leads", icon: TrendingUp },
+  {
+    id: "customers",
+    label: "Customers",
+    href: "/crm/customers/accounts",
+    icon: UsersIcon,
+  },
+  {
+    id: "inventory",
+    label: "Inventory",
+    href: "/crm/inventory/products",
+    icon: Package,
+  },
+  {
+    id: "operations",
+    label: "Operations",
+    href: "/crm/operations/order-fulfillment",
+    icon: ClipboardList,
+  },
+  {
+    id: "finance",
+    label: "Finance",
+    href: "/crm/finance/invoices",
+    icon: DollarSign,
+  },
+  {
+    id: "reports",
+    label: "Reports",
+    href: "/crm/reports/analytics",
+    icon: BarChart3,
+  },
+  {
+    id: "automation",
+    label: "Automation",
+    href: "/crm/automation/workflows",
+    icon: TargetIcon,
+  },
+  {
+    id: "ai-marketing",
+    label: "AI Marketing",
+    href: "/crm/ai-marketing/video",
+    icon: Sparkles,
+  },
+  {
+    id: "administration",
+    label: "Administration",
+    href: "/crm/administration/users",
+    icon: ShieldCheck,
+  },
+  {
+    id: "settings",
+    label: "Settings",
+    href: "/crm/settings/organization",
+    icon: GearIcon,
+  },
 ] as CRMPageLayoutTab[];
 
 function getActiveSectionFromPathname(pathname: string): string {
-  if (pathname.startsWith('/crm/dashboard')) return 'dashboard';
-  if (pathname.startsWith('/crm/sales')) return 'sales';
-  if (pathname.startsWith('/crm/customers')) return 'customers';
-  if (pathname.startsWith('/crm/inventory')) return 'inventory';
-  if (pathname.startsWith('/crm/operations')) return 'operations';
-  if (pathname.startsWith('/crm/finance')) return 'finance';
-  if (pathname.startsWith('/crm/reports')) return 'reports';
-  if (pathname.startsWith('/crm/automation')) return 'automation';
-  if (pathname.startsWith('/crm/administration')) return 'administration';
-  if (pathname.startsWith('/crm/settings')) return 'settings';
-  return 'dashboard';
+  if (pathname.startsWith("/crm/dashboard")) return "dashboard";
+  if (pathname.startsWith("/crm/sales")) return "sales";
+  if (pathname.startsWith("/crm/customers")) return "customers";
+  if (pathname.startsWith("/crm/inventory")) return "inventory";
+  if (pathname.startsWith("/crm/operations")) return "operations";
+  if (pathname.startsWith("/crm/finance")) return "finance";
+  if (pathname.startsWith("/crm/reports")) return "reports";
+  if (pathname.startsWith("/crm/automation")) return "automation";
+  if (pathname.startsWith("/crm/ai-marketing")) return "ai-marketing";
+  if (pathname.startsWith("/crm/administration")) return "administration";
+  if (pathname.startsWith("/crm/settings")) return "settings";
+  return "dashboard";
 }
 
 export interface CRMPageLayoutProps {
@@ -66,7 +127,11 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
     <div className="flex flex-col h-full">
       <div className="border-b bg-background sticky top-0 z-10">
         <div className="px-4 py-3 sm:px-6 sm:py-4">
-          {title && <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{title}</h1>}
+          {title && (
+            <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
+              {title}
+            </h1>
+          )}
           <Tabs value={activeSection} onValueChange={handleTabChange}>
             <TabsList className="w-full sm:w-auto justify-start">
               {CRM_SECTION_TABS.map((tab) => {
@@ -82,9 +147,7 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
           </Tabs>
         </div>
       </div>
-      <div className="flex-1 overflow-auto p-4 sm:p-6">
-        {children}
-      </div>
+      <div className="flex-1 overflow-auto p-4 sm:p-6">{children}</div>
     </div>
   );
 }
