@@ -5,7 +5,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@gaqno-development/frontcore/components/ui";
-import type { IconComponent } from "@gaqno-development/frontcore/utils";
+import type { LucideIcon } from "lucide-react";
 import {
   LayoutDashboard,
   TrendingUp,
@@ -26,7 +26,7 @@ export interface CRMPageLayoutTab {
   id: string;
   label: string;
   href: string;
-  icon: IconComponent;
+  icon: LucideIcon | React.ComponentType<{ className?: string }>;
 }
 
 const CRM_SECTION_TABS = [
@@ -93,6 +93,46 @@ const CRM_SECTION_TABS = [
   },
 ] as CRMPageLayoutTab[];
 
+const CRM_TAB_CATEGORY_ORDER = [
+  "Overview",
+  "Business",
+  "Insights",
+  "Administration",
+] as const;
+
+const CRM_SECTION_TAB_CATEGORIES: Record<string, (typeof CRM_TAB_CATEGORY_ORDER)[number]> = {
+  dashboard: "Overview",
+  sales: "Business",
+  customers: "Business",
+  inventory: "Business",
+  operations: "Business",
+  finance: "Business",
+  reports: "Insights",
+  automation: "Insights",
+  "ai-marketing": "Insights",
+  administration: "Administration",
+  settings: "Administration",
+};
+
+export interface CRMPageLayoutTabGroup {
+  label: string;
+  tabs: CRMPageLayoutTab[];
+}
+
+function getCRMSectionTabGroups(): CRMPageLayoutTabGroup[] {
+  const byCategory = new Map<string, CRMPageLayoutTab[]>();
+  for (const tab of CRM_SECTION_TABS) {
+    const category = CRM_SECTION_TAB_CATEGORIES[tab.id] ?? "Overview";
+    if (!byCategory.has(category)) byCategory.set(category, []);
+    byCategory.get(category)!.push(tab);
+  }
+  return CRM_TAB_CATEGORY_ORDER.filter((label) => byCategory.has(label)).map(
+    (label) => ({ label, tabs: byCategory.get(label)! }),
+  );
+}
+
+const CRM_SECTION_TAB_GROUPS = getCRMSectionTabGroups();
+
 function getActiveSectionFromPathname(pathname: string): string {
   if (pathname.startsWith("/crm/dashboard")) return "dashboard";
   if (pathname.startsWith("/crm/sales")) return "sales";
@@ -133,16 +173,30 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
             </h1>
           )}
           <Tabs value={activeSection} onValueChange={handleTabChange}>
-            <TabsList className="w-full sm:w-auto justify-start">
-              {CRM_SECTION_TABS.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <TabsTrigger key={tab.id} value={tab.id}>
-                    {Icon && <Icon className="h-4 w-4 mr-2 shrink-0" />}
-                    {tab.label}
-                  </TabsTrigger>
-                );
-              })}
+            <TabsList className="w-full sm:w-auto flex flex-wrap gap-x-6 gap-y-2 justify-start h-auto min-h-0 p-1 bg-muted/50">
+              {CRM_SECTION_TAB_GROUPS.map((group) => (
+                <React.Fragment key={group.label}>
+                  <span
+                    className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center px-1 basis-full sm:basis-auto sm:contents"
+                    aria-hidden
+                  >
+                    {group.label}
+                  </span>
+                  {group.tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    return (
+                      <TabsTrigger
+                        key={tab.id}
+                        value={tab.id}
+                        className="gap-2 shrink-0"
+                      >
+                        {Icon && <Icon className="h-4 w-4 shrink-0" />}
+                        {tab.label}
+                      </TabsTrigger>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
             </TabsList>
           </Tabs>
         </div>
