@@ -14,7 +14,7 @@ import {
   SelectItem,
 } from "@gaqno-development/frontcore/components/ui";
 import { AIContentGenerator } from "@gaqno-development/frontcore/components/ai";
-import { useErpProducts } from "@gaqno-development/frontcore/hooks/ai";
+import { useErpProducts } from "@gaqno-development/frontcore/hooks/erp";
 import type { GenerateContentProductInput } from "@gaqno-development/frontcore/utils/api";
 
 export default function AIContentPage() {
