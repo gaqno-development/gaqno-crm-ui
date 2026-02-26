@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import federation from "@originjs/vite-plugin-federation";
@@ -8,6 +9,11 @@ export default defineConfig(async () => {
   return {
     base: "/",
     resolve: { dedupe: ["motion"] },
+    test: {
+      globals: true,
+      environment: "jsdom",
+      setupFiles: ["./src/test-setup.ts"],
+    },
     server: {
       port: 3003,
       origin: "http://localhost:3003",
@@ -23,6 +29,11 @@ export default defineConfig(async () => {
         filename: "remoteEntry.js",
         exposes: {
           "./App": "./src/App.tsx",
+          "./OverviewPage": "./src/pages/dashboard/OverviewPage.tsx",
+          "./LeadsPage": "./src/pages/sales/LeadsPage.tsx",
+          "./DealsPage": "./src/pages/sales/DealsPage.tsx",
+          "./ContactsPage": "./src/pages/customers/ContactsPage.tsx",
+          "./InteractionHistoryPage": "./src/pages/customers/InteractionHistoryPage.tsx",
         },
         shared: {
           react: {
@@ -68,5 +79,5 @@ export default defineConfig(async () => {
       },
     },
     optimizeDeps: { include: ["motion", "use-sync-external-store"] },
-  };
+  } as any;
 });
