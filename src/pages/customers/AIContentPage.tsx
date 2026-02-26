@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,29 +13,16 @@ import {
   SelectItem,
 } from "@gaqno-development/frontcore/components/ui";
 import { AIContentGenerator } from "@gaqno-development/frontcore/components/ai";
-import { useErpProducts } from "@gaqno-development/frontcore/hooks/erp";
-import type { GenerateContentProductInput } from "@gaqno-development/frontcore/utils/api";
+import { useAIContentPage } from "../../hooks/useAIContentPage";
 
 export default function AIContentPage() {
-  const [selectedId, setSelectedId] = useState("");
-  const productsQuery = useErpProducts({ limit: 50 });
-  const products = productsQuery.data ?? [];
-  const productData: GenerateContentProductInput | null = selectedId
-    ? (() => {
-        const p = products.find((x) => x.id === selectedId);
-        return p
-          ? {
-              id: p.id,
-              name: p.name,
-              price: p.price,
-              tenantId: p.tenantId,
-              description: p.description,
-              category: p.category,
-              imageUrls: p.imageUrls,
-            }
-          : null;
-      })()
-    : null;
+  const {
+    selectedId,
+    setSelectedId,
+    products,
+    productData,
+    isLoading,
+  } = useAIContentPage();
 
   return (
     <div className="space-y-6">
@@ -53,12 +39,12 @@ export default function AIContentPage() {
           <Select
             value={selectedId}
             onValueChange={setSelectedId}
-            disabled={productsQuery.isLoading}
+            disabled={isLoading}
           >
             <SelectTrigger className="max-w-md mt-2">
               <SelectValue
                 placeholder={
-                  productsQuery.isLoading ? "Loading…" : "Select a product"
+                  isLoading ? "Loading…" : "Select a product"
                 }
               />
             </SelectTrigger>

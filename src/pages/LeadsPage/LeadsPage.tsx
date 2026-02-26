@@ -9,10 +9,10 @@ import {
 } from "@gaqno-development/frontcore/components/ui";
 import { Search } from "lucide-react";
 import { useCRMLeads } from "../../hooks/useCRMLeads";
-import type { LeadStatus, LeadSource } from "../../types/crm";
+import type { LeadStatus, LeadSource } from "../../../types/crm";
 import { cn } from "@gaqno-development/frontcore/lib/utils";
-import { LEADS_COLUMNS } from "./leads/LeadsConstants";
-import { AddLeadDialog } from "./leads/AddLeadDialog";
+import { LEADS_COLUMNS } from "./components/LeadsConstants";
+import { AddLeadDialog } from "./components/AddLeadDialog";
 
 export default function LeadsPage() {
   const {
@@ -33,7 +33,6 @@ export default function LeadsPage() {
 
   return (
     <div className="space-y-5">
-      {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {statsData.map(({ label, value, icon: Icon, color }) => (
           <div
@@ -51,7 +50,6 @@ export default function LeadsPage() {
         ))}
       </div>
 
-      {/* DataTable with inline toolbar */}
       <DataTable
         columns={LEADS_COLUMNS}
         data={{ data: leads, isLoading }}

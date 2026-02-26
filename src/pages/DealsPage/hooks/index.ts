@@ -1,0 +1,1 @@
+export { useDealsPage } from "./useDealsPage";

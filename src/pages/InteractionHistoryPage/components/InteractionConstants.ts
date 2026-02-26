@@ -5,7 +5,7 @@ import {
   FileText,
   Users,
 } from "lucide-react";
-import type { InteractionType } from "../../../types/crm";
+import type { InteractionType } from "@gaqno-development/types/crm";
 
 export const INTERACTION_TYPE_CONFIG: Record<
   InteractionType,

@@ -6,20 +6,18 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
+    "baseUrl": "../gaqno-crm-service/gaqno-crm-ui",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["../gaqno-crm-service/gaqno-crm-ui/src/*"]
     },
     "jsx": "preserve",
     "skipLibCheck": true
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
+    "../gaqno-crm-service/gaqno-crm-ui/next-env.d.ts",
+    "../gaqno-crm-service/gaqno-crm-ui/**/*.ts",
+    "../gaqno-crm-service/gaqno-crm-ui/**/*.tsx",
+    "../gaqno-crm-service/gaqno-crm-ui/.next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["../gaqno-crm-service/gaqno-crm-ui/node_modules"]
 }

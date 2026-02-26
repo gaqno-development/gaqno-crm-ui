@@ -1,0 +1,1 @@
+export { useContactsPage } from "./useContactsPage";
