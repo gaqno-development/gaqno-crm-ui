@@ -18,8 +18,8 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY . .
 RUN mkdir -p public
-# PATCH: Fix unused @ts-expect-error in @gaqno-development/frontcore
-RUN find node_modules -name useDialogForm.ts -exec sed -i '/@ts-expect-error/d' {} +
+# PATCH: Fix unused @ts-expect-error in @gaqno-development/frontcore (Alpine sed -i needs backup)
+RUN (find node_modules -name useDialogForm.ts -exec sed -i.bak '/@ts-expect-error/d' {} \; -exec rm -f {}.bak \; 2>/dev/null || true)
 RUN npm run build
 
 FROM nginx:alpine AS runner
@@ -29,6 +29,8 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY --from=builder /app/public /usr/share/nginx/html/public
 
 RUN echo 'server { listen 3003; server_name _; root /usr/share/nginx/html; index index.html; absolute_redirect off; \
+    location = /assets/remoteEntry.js { alias /usr/share/nginx/html/assets/remoteEntry.js; add_header Cache-Control "no-cache"; add_header Access-Control-Allow-Origin "*"; } \
+    location = /crm/assets/remoteEntry.js { alias /usr/share/nginx/html/assets/remoteEntry.js; add_header Cache-Control "no-cache"; add_header Access-Control-Allow-Origin "*"; } \
     location /crm/assets/ { alias /usr/share/nginx/html/assets/; add_header Cache-Control "public, immutable"; add_header Access-Control-Allow-Origin "*"; } \
     location /assets/ { alias /usr/share/nginx/html/assets/; add_header Cache-Control "public, immutable"; add_header Access-Control-Allow-Origin "*"; } \
     location / { try_files $uri $uri/ /index.html; } }' > /etc/nginx/conf.d/default.conf
