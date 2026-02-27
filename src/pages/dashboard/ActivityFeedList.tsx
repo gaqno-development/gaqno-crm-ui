@@ -1,6 +1,6 @@
 import { cn } from "@gaqno-development/frontcore/lib/utils";
 import { formatDateTime } from "@gaqno-development/frontcore/utils";
-import { INTERACTION_TYPE_CONFIG } from "../customers/history/InteractionConstants";
+import { INTERACTION_TYPE_CONFIG } from "../InteractionHistoryPage/components/InteractionConstants";
 import type { InteractionType } from "@gaqno-development/types/crm";
 
 export interface ActivityFeedItem {

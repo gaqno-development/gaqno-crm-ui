@@ -6,6 +6,7 @@
     "prepare": "husky",
     "dev": "nodemon",
     "build": "vite build",
+    "build:docker": "docker build -t gaqno-crm-ui:local --build-arg NPM_TOKEN=$NPM_TOKEN .",
     "prebuild": "test -f ../package.json && npm run build:types --prefix .. || true",
     "preview": "vite preview --port 3003",
     "start": "vite preview --port 3003",
