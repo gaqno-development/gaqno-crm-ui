@@ -11,7 +11,9 @@
     "preview": "vite preview --port 3003",
     "start": "vite preview --port 3003",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "echo \"No tests\""
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --run --coverage"
   },
   "dependencies": {
     "@gaqno-development/types": "^1.0.0",
@@ -26,6 +28,8 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^14.3.1",
     "@module-federation/vite": "^1.0.0",
     "@originjs/vite-plugin-federation": "^1.4.1",
     "@tailwindcss/vite": "^4.1.18",
@@ -34,6 +38,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.57.0",
+    "jsdom": "^25.0.1",
     "nodemon": "^3.1.11",
     "postcss": "^8.4.32",
     "tailwind-scrollbar": "^3.0.5",
@@ -42,6 +47,7 @@
     "typescript": "5.9.3",
     "vite": "^5.4.0",
     "vite-plugin-top-level-await": "^1.6.0",
+    "vitest": "^2.1.6",
     "husky": "^9.1.7",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0"
