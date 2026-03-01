@@ -7,7 +7,7 @@ import {
 import { LucideIcon } from "lucide-react";
 import { cn } from "@gaqno-development/frontcore/lib/utils";
 
-interface StatCardProps {
+export interface StatCardProps {
   title: string;
   value: string | number;
   icon?: LucideIcon;
@@ -31,41 +31,36 @@ export function StatCard({
   className,
   variant = "default",
 }: StatCardProps) {
-  const getVariantClasses = () => {
-    switch (variant) {
-      case "compact":
-        return "p-4";
-      case "metric":
-        return "p-6";
-      default:
-        return "p-6";
-    }
-  };
-
-  const getValueClasses = () => {
-    switch (variant) {
-      case "compact":
-        return "text-lg font-semibold";
-      case "metric":
-        return "text-3xl font-bold";
-      default:
-        return "text-2xl font-bold";
-    }
-  };
+  const variantClasses =
+    variant === "compact" ? "p-4" : variant === "metric" ? "p-6" : "p-6";
+  const valueClasses =
+    variant === "compact"
+      ? "text-lg font-semibold"
+      : variant === "metric"
+        ? "text-3xl font-bold"
+        : "text-2xl font-bold";
 
   return (
     <Card className={cn("transition-all duration-200 hover:shadow-md", className)}>
-      <CardHeader className={cn("flex flex-row items-center justify-between", getVariantClasses())}>
+      <CardHeader
+        className={cn(
+          "flex flex-row items-center justify-between space-y-0",
+          variantClasses
+        )}
+      >
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
       </CardHeader>
-      <CardContent className={cn("space-y-1", getVariantClasses())}>
-        <div className={cn("flex items-baseline", variant === "metric" ? "gap-2" : "gap-1")}>
-          <div className={getValueClasses()}>
-            {isLoading ? "…" : value}
-          </div>
+      <CardContent className={cn("space-y-1", variantClasses)}>
+        <div
+          className={cn(
+            "flex items-baseline",
+            variant === "metric" ? "gap-2" : "gap-1"
+          )}
+        >
+          <div className={valueClasses}>{isLoading ? "…" : value}</div>
           {(trend || description) && (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 mt-1">
+            <div className="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
               {trend && (
                 <span
                   className={cn(

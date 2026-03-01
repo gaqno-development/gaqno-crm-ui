@@ -11,9 +11,9 @@
     "preview": "vite preview --port 3003",
     "start": "vite preview --port 3003",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "vitest --run",
+    "test": "vitest run",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest --run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@gaqno-development/types": "^1.0.0",
