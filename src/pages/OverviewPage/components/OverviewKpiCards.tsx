@@ -1,4 +1,4 @@
-import { StatCard } from "../../../components/StatCard";
+import { StatCard } from "@gaqno-development/frontcore/components/ui";
 import type { CRMStatCard } from "../../hooks/useCRMStats";
 
 export interface OverviewKpiCardsProps {
@@ -18,6 +18,7 @@ export function OverviewKpiCards({ cards, isLoading }: OverviewKpiCardsProps) {
           description={description}
           isLoading={isLoading}
           variant="compact"
+          size="sm"
         />
       ))}
     </div>

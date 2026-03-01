@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@gaqno-development/frontcore/components/ui";
 import { MessageCircle, Loader2 } from "lucide-react";
 import { OverviewDealFunnelList } from "./OverviewDealFunnelList";
@@ -34,16 +35,21 @@ export function OverviewDealFunnelCard({
 
       <div className="flex gap-2 mt-5 pt-4 border-t border-border">
         <Button size="sm" variant="outline" asChild>
-          <a href="/crm/sales/leads">+ Novo Lead</a>
+          <Link to="/crm/sales/leads">+ Novo Lead</Link>
         </Button>
         <Button size="sm" variant="outline" asChild>
-          <a href="/crm/sales/deals">+ Nova Oportunidade</a>
+          <Link to="/crm/sales/deals">+ Nova Oportunidade</Link>
         </Button>
         <Button size="sm" variant="outline" asChild>
-          <a href="/omnichannel" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
+          <Link
+            to="/omnichannel"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5"
+          >
             <MessageCircle className="h-3.5 w-3.5" />
             Painel Omnichannel
-          </a>
+          </Link>
         </Button>
       </div>
     </div>
