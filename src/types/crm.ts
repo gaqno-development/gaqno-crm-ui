@@ -1,2 +1,1 @@
-export * from "./crm";
-export * from "./erp";
+export * from "@gaqno-development/types/crm";
