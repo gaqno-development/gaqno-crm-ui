@@ -4,8 +4,11 @@ import {
   QueryProvider,
   TenantProvider,
 } from "@gaqno-development/frontcore";
+import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { CRMPageLayout } from "./layouts/CRMPageLayout";
+
+initI18n();
 
 const OverviewPage = lazy(() => import("./pages/OverviewPage/OverviewPage"));
 const KpisPage = lazy(() => import("./pages/dashboard/KpisPage"));
@@ -168,12 +171,14 @@ function CRMRoutes() {
 
 export default function App() {
   return (
-    <QueryProvider>
-      <AuthProvider>
-        <TenantProvider>
-          <CRMRoutes />
-        </TenantProvider>
-      </AuthProvider>
-    </QueryProvider>
+    <I18nProvider>
+      <QueryProvider>
+        <AuthProvider>
+          <TenantProvider>
+            <CRMRoutes />
+          </TenantProvider>
+        </AuthProvider>
+      </QueryProvider>
+    </I18nProvider>
   );
 }
