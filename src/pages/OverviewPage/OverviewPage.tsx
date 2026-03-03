@@ -3,12 +3,22 @@ import { useCRMInteractions } from "../../hooks/useCRMContacts";
 import { OverviewKpiCards } from "./components/OverviewKpiCards";
 import { OverviewDealFunnelCard } from "./components/OverviewDealFunnelCard";
 import { OverviewActivityFeedCard } from "./components/OverviewActivityFeedCard";
-
 export default function OverviewPage() {
-  const { statCards, isLoading, leadStats, dealStats } = useCRMStats();
+  const { statCards, isLoading, isError, leadStats, dealStats } = useCRMStats();
 
   const { interactions, isLoading: isLoadingInteractions } =
     useCRMInteractions();
+
+  if (isError) {
+    return (
+      <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive">
+        <p className="font-medium">Erro ao carregar dados</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Não foi possível carregar os dados do overview. Verifique a conexão e se o serviço CRM está disponível.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

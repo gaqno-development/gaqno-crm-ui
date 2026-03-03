@@ -13,7 +13,7 @@ export const STAGE_ORDER: DealStage[] = [
 ];
 
 export function useCRMDeals() {
-  const { data: dealsData = [], isLoading } = useQuery({
+  const { data: dealsData = [], isLoading, isError } = useQuery({
     queryKey: ["crm", "deals"],
     queryFn: async () => {
       const { data } = await coreAxiosClient.crm.get<Deal[]>("/deals");
@@ -53,5 +53,5 @@ export function useCRMDeals() {
     };
   }, [dealsData]);
 
-  return { deals: dealsData, dealsByStage, stageOrder: STAGE_ORDER, stats, isLoading };
+  return { deals: dealsData, dealsByStage, stageOrder: STAGE_ORDER, stats, isLoading, isError };
 }

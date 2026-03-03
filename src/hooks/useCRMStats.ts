@@ -17,10 +17,11 @@ export interface CRMStatCard {
 }
 
 export function useCRMStats() {
-  const { stats: leadStats, isLoading: isLoadingLeads } = useCRMLeads();
-  const { stats: dealStats, isLoading: isLoadingDeals } = useCRMDeals();
+  const { stats: leadStats, isLoading: isLoadingLeads, isError: isErrorLeads } = useCRMLeads();
+  const { stats: dealStats, isLoading: isLoadingDeals, isError: isErrorDeals } = useCRMDeals();
 
   const isLoading = isLoadingLeads || isLoadingDeals;
+  const isError = isErrorLeads || isErrorDeals;
 
   const statCards = useMemo<CRMStatCard[]>(
     () => [
@@ -61,6 +62,7 @@ export function useCRMStats() {
   return {
     statCards,
     isLoading,
+    isError,
     leadStats,
     dealStats,
   };

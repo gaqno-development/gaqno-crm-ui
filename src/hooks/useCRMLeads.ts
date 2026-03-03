@@ -31,7 +31,7 @@ export function useCRMLeads() {
   const [status, setStatus] = useState<LeadStatus | "all">("all");
   const [source, setSource] = useState<LeadSource | "all">("all");
 
-  const { data: leadsData = [], isLoading } = useQuery({
+  const { data: leadsData = [], isLoading, isError: isErrorLeads } = useQuery({
     queryKey: ["crm", "leads"],
     queryFn: async () => {
       const { data } = await coreAxiosClient.crm.get<Lead[]>("/leads");
@@ -103,6 +103,7 @@ export function useCRMLeads() {
     stats,
     statsData,
     isLoading,
+    isError: isErrorLeads,
     createLead: createLeadMutation.mutateAsync,
     isCreating: createLeadMutation.isPending,
     // filter state
