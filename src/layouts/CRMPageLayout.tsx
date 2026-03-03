@@ -88,3 +88,5 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
     </PageLayout>
   );
 }
+
+export default CRMPageLayout;
