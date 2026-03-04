@@ -1,22 +1,31 @@
+import { useDroppable } from "@dnd-kit/core";
 import { cn } from "@gaqno-development/frontcore/lib/utils";
 import { formatCurrency } from "@gaqno-development/frontcore/utils";
-import type { Deal } from "../../../../types/crm";
+import type { Deal, DealStage } from "../../../../types/crm";
 import { DealCard } from "./DealCard";
+import { DraggableDealCard } from "./DraggableDealCard";
 
 export interface DealsStageColumnProps {
+  stage: DealStage;
   label: string;
   color: string;
   headerColor: string;
   deals: Deal[];
+  onMarkWon?: (dealId: string) => void;
+  onMarkLost?: (dealId: string) => void;
 }
 
 export function DealsStageColumn({
+  stage,
   label,
   color,
   headerColor,
   deals,
+  onMarkWon,
+  onMarkLost,
 }: DealsStageColumnProps) {
   const stageTotal = deals.reduce((sum, d) => sum + d.value, 0);
+  const { setNodeRef, isOver } = useDroppable({ id: stage });
 
   return (
     <div
@@ -36,9 +45,20 @@ export function DealsStageColumn({
           )}
         </div>
       </div>
-      <div className="flex flex-col gap-2 p-2 flex-1">
+      <div
+        ref={setNodeRef}
+        className={cn(
+          "flex flex-col gap-2 p-2 flex-1 min-h-[120px] transition-colors",
+          isOver && "bg-muted/50"
+        )}
+      >
         {deals.map((deal) => (
-          <DealCard key={deal.id} deal={deal} />
+          <DraggableDealCard
+            key={deal.id}
+            deal={deal}
+            onMarkWon={onMarkWon}
+            onMarkLost={onMarkLost}
+          />
         ))}
         {deals.length === 0 && (
           <div className="flex-1 flex items-center justify-center text-xs text-muted-foreground/50 italic py-6">

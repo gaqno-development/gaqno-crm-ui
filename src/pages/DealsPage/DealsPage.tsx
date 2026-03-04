@@ -1,3 +1,10 @@
+import {
+  DndContext,
+  type DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { cn } from "@gaqno-development/frontcore/lib/utils";
 import { formatCurrency } from "@gaqno-development/frontcore/utils";
 import { TrendingUp, DollarSign, Briefcase, Trophy } from "lucide-react";
@@ -15,7 +22,23 @@ const STAGE_CONFIG: Record<DealStage, { label: string; color: string; headerColo
 };
 
 export default function DealsPage() {
-  const { dealsByStage, stageOrder, stats, isLoading } = useDealsPage();
+  const { dealsByStage, stageOrder, stats, isLoading, updateDealStage } = useDealsPage();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const deal = active.data.current?.deal as { id: string; stage: DealStage } | undefined;
+    if (!deal) return;
+    const newStage = over.id as DealStage;
+    if (deal.stage === newStage) return;
+    updateDealStage(deal.id, newStage);
+  };
 
   if (isLoading) {
     return (
@@ -46,21 +69,26 @@ export default function DealsPage() {
         ))}
       </div>
 
-      <div className="flex gap-3 overflow-x-auto pb-4 min-h-[500px]">
-        {stageOrder.map((stage) => {
-          const config = STAGE_CONFIG[stage];
-          const deals = dealsByStage[stage];
-          return (
-            <DealsStageColumn
-              key={stage}
-              label={config.label}
-              color={config.color}
-              headerColor={config.headerColor}
-              deals={deals}
-            />
-          );
-        })}
-      </div>
+      <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <div className="flex gap-3 overflow-x-auto pb-4 min-h-[500px]">
+          {stageOrder.map((stage) => {
+            const config = STAGE_CONFIG[stage];
+            const deals = dealsByStage[stage];
+            return (
+              <DealsStageColumn
+                key={stage}
+                stage={stage}
+                label={config.label}
+                color={config.color}
+                headerColor={config.headerColor}
+                deals={deals}
+                onMarkWon={(id) => updateDealStage(id, "won")}
+                onMarkLost={(id) => updateDealStage(id, "lost")}
+              />
+            );
+          })}
+        </div>
+      </DndContext>
     </div>
   );
 }

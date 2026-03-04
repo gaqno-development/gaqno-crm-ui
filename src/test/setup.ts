@@ -23,12 +23,14 @@ const mockGet = vi.fn((url: string) => {
   return Promise.resolve({ data: [] });
 });
 const mockPost = vi.fn(() => Promise.resolve({ data: {} }));
+const mockPatch = vi.fn(() => Promise.resolve({ data: {} }));
 
 vi.mock("@gaqno-development/frontcore/utils/api", () => ({
   coreAxiosClient: {
     crm: {
       get: mockGet,
       post: mockPost,
+      patch: mockPatch,
     },
   },
 }));
