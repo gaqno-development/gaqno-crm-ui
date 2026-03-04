@@ -1,7 +1,6 @@
-# ============================================
 # Dependencies
-# ============================================
 node_modules/
+**/node_modules/
 .pnp
 .pnp.js
 .yarn/cache
@@ -20,10 +19,7 @@ coverage/
 *.test.js.snap
 __tests__/coverage/
 
-# ============================================
-# Next.js
-# ============================================
-# Build outputs
+# Build
 .next/
 out/
 dist/
