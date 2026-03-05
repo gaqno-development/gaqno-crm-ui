@@ -32,10 +32,15 @@ const TAB_KEYS = [
   { id: "settings", href: "/crm/settings/organization", icon: <GearIcon className="h-4 w-4" />, tKey: "crm.settings" },
 ] as const;
 
+const CRM_SEGMENT = "/crm";
+
 function getActiveSection(pathname: string): string {
-  const rest = pathname.startsWith("/crm")
-    ? pathname.slice("/crm".length).replace(/^\/+/, "")
-    : pathname.replace(/^\/+/, "");
+  const normalized = pathname.replace(/\/+$/, "").replace(/^\/+/, "");
+  const crmIndex = normalized.indexOf(CRM_SEGMENT);
+  const rest =
+    crmIndex >= 0
+      ? normalized.slice(crmIndex + CRM_SEGMENT.length).replace(/^\/+/, "")
+      : normalized;
   const sections = TAB_KEYS.map((t) => t.id);
   for (const section of sections) {
     if (rest === section || rest.startsWith(`${section}/`)) return section;

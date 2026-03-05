@@ -1,15 +1,40 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { CRMPageLayout } from "./layouts/CRMPageLayout";
 
 initI18n();
 
+const CRM_SEGMENT = "/crm";
+const CRM_ROOT = "/crm";
+const CRM_DEFAULT_VIEW = "dashboard/overview";
+
 function crmPathFromLocation(pathname: string): string {
-  const rest = pathname.startsWith("/crm")
-    ? pathname.slice("/crm".length).replace(/^\/+/, "")
-    : pathname.replace(/^\/+/, "");
-  return rest || "dashboard/overview";
+  const normalized = pathname.replace(/\/+$/, "").replace(/^\/+/, "");
+  const crmIndex = normalized.indexOf(CRM_SEGMENT);
+  const rest =
+    crmIndex >= 0
+      ? normalized.slice(crmIndex + CRM_SEGMENT.length).replace(/^\/+/, "")
+      : normalized;
+  return rest || CRM_DEFAULT_VIEW;
+}
+
+function CRMNotFoundPage() {
+  return (
+    <div className="rounded-lg border border-border bg-card p-6 text-center">
+      <p className="font-semibold text-foreground">Página não encontrada</p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        A rota solicitada não existe no CRM.
+      </p>
+      <Link
+        to={`${CRM_ROOT}/${CRM_DEFAULT_VIEW}`}
+        className="mt-4 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline transition-opacity duration-200 hover:opacity-90"
+      >
+        Voltar ao Overview
+      </Link>
+    </div>
+  );
 }
 
 const OverviewPage = lazy(() => import("./pages/OverviewPage/OverviewPage"));
@@ -77,9 +102,10 @@ const ApiKeysPage = lazy(() => import("./pages/settings/ApiKeysPage"));
 
 function Loading() {
   return (
-    <div className="flex items-center justify-center p-6">
-      <div className="animate-pulse text-center">
-        <p className="text-muted-foreground">Carregando...</p>
+    <div className="flex min-h-[200px] items-center justify-center p-6">
+      <div className="flex flex-col items-center gap-4">
+        <Spinner className="h-8 w-8 text-primary" />
+        <p className="text-sm text-muted-foreground">Carregando...</p>
       </div>
     </div>
   );
@@ -140,10 +166,9 @@ const PATH_TO_PAGE: Record<string, React.LazyExoticComponent<React.ComponentType
   "settings/api-keys": ApiKeysPage,
 };
 
-function CRMContent() {
-  const { pathname } = useLocation();
-  const path = crmPathFromLocation(pathname);
-  const Page = PATH_TO_PAGE[path] ?? PATH_TO_PAGE["dashboard/overview"];
+function renderView(path: string) {
+  const Page = PATH_TO_PAGE[path];
+  if (!Page) return <CRMNotFoundPage />;
   return (
     <Suspense fallback={<Loading />}>
       <Page />
@@ -151,34 +176,34 @@ function CRMContent() {
   );
 }
 
-function CRMRoutes() {
+function CRMPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathname = location.pathname;
+
+  React.useEffect(() => {
+    const normalized = pathname.replace(/\/$/, "");
+    if (normalized === CRM_ROOT) {
+      navigate(`${CRM_ROOT}/${CRM_DEFAULT_VIEW}`, { replace: true });
+    }
+  }, [pathname, navigate]);
+
+  if (pathname === CRM_ROOT || pathname === `${CRM_ROOT}/`) {
+    return null;
+  }
+
+  const path = crmPathFromLocation(pathname);
   return (
-    <Routes>
-      <Route path="/crm" element={<Navigate to="/crm/dashboard/overview" replace />} />
-      <Route
-        path="/crm/*"
-        element={
-          <CRMPageLayout title="CRM">
-            <CRMContent />
-          </CRMPageLayout>
-        }
-      />
-      <Route
-        path="*"
-        element={
-          <CRMPageLayout title="CRM">
-            <CRMContent />
-          </CRMPageLayout>
-        }
-      />
-    </Routes>
+    <CRMPageLayout title="CRM">
+      {renderView(path)}
+    </CRMPageLayout>
   );
 }
 
 export default function App() {
   return (
     <I18nProvider>
-      <CRMRoutes />
+      <CRMPage />
     </I18nProvider>
   );
 }

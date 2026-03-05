@@ -5,6 +5,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { cn } from "@gaqno-development/frontcore/lib/utils";
 import { formatCurrency } from "@gaqno-development/frontcore/utils";
 import { TrendingUp, DollarSign, Briefcase, Trophy } from "lucide-react";
@@ -42,22 +43,25 @@ export default function DealsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="flex min-h-[320px] items-center justify-center p-8">
+        <div className="flex flex-col items-center gap-4">
+          <Spinner className="h-8 w-8 text-primary" />
+          <p className="text-sm text-muted-foreground">Carregando negócios...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 h-full">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="space-y-6 h-full">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
           { label: "Active Deals", value: stats.activeDeals, icon: Briefcase, color: "text-primary" },
           { label: "Pipeline Value", value: formatCurrency(stats.pipelineValue), icon: TrendingUp, color: "text-blue-500" },
           { label: "Won This Month", value: formatCurrency(stats.wonThisMonth), icon: Trophy, color: "text-green-500" },
           { label: "Total Deals", value: stats.totalDeals, icon: DollarSign, color: "text-purple-500" },
         ].map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="rounded-xl border border-border bg-card px-4 py-3 flex items-center gap-3">
+          <div key={label} className="rounded-xl border border-border bg-card p-4 flex items-center gap-4">
             <div className={cn("p-2 rounded-lg bg-muted", color)}>
               <Icon className="h-4 w-4" />
             </div>
@@ -70,7 +74,7 @@ export default function DealsPage() {
       </div>
 
       <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-        <div className="flex gap-3 overflow-x-auto pb-4 min-h-[500px]">
+        <div className="flex gap-4 overflow-x-auto pb-6 min-h-[480px]">
           {stageOrder.map((stage) => {
             const config = STAGE_CONFIG[stage];
             const deals = dealsByStage[stage];
