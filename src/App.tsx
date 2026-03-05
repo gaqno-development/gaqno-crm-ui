@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
 import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { CRMPageLayout } from "./layouts/CRMPageLayout";
@@ -7,7 +7,6 @@ import { CRMPageLayout } from "./layouts/CRMPageLayout";
 initI18n();
 
 const CRM_SEGMENT = "/crm";
-const CRM_ROOT = "/crm";
 const CRM_DEFAULT_VIEW = "dashboard/overview";
 
 function crmPathFromLocation(pathname: string): string {
@@ -30,7 +29,7 @@ function CRMNotFoundPage() {
         A rota solicitada não existe no CRM.
       </p>
       <Link
-        to={`${CRM_ROOT}/${CRM_DEFAULT_VIEW}`}
+        to={`/crm/${CRM_DEFAULT_VIEW}`}
         className="mt-4 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline transition-opacity duration-200 hover:opacity-90"
       >
         Voltar ao Overview
@@ -179,21 +178,7 @@ function renderView(path: string) {
 }
 
 function CRMPage() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const pathname = location.pathname;
-
-  React.useEffect(() => {
-    const normalized = pathname.replace(/\/$/, "");
-    if (normalized === CRM_ROOT) {
-      navigate(`${CRM_ROOT}/${CRM_DEFAULT_VIEW}`, { replace: true });
-    }
-  }, [pathname, navigate]);
-
-  if (pathname === CRM_ROOT || pathname === `${CRM_ROOT}/`) {
-    return null;
-  }
-
+  const pathname = useLocation().pathname;
   const path = crmPathFromLocation(pathname);
   return (
     <CRMPageLayout title="CRM">
