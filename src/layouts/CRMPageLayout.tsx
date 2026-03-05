@@ -78,6 +78,7 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
 
   return (
     <PageLayout
+      key={pathname}
       title={title ?? t("crm.title")}
       tabs={tabs}
       activeTab={activeTab}
