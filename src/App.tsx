@@ -1,9 +1,16 @@
 import { lazy, Suspense } from "react";
 import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { CRMPageLayout } from "./layouts/CRMPageLayout";
 
 initI18n();
+
+function crmPathFromLocation(pathname: string): string {
+  const rest = pathname.startsWith("/crm")
+    ? pathname.slice("/crm".length).replace(/^\/+/, "")
+    : pathname.replace(/^\/+/, "");
+  return rest || "dashboard/overview";
+}
 
 const OverviewPage = lazy(() => import("./pages/OverviewPage/OverviewPage"));
 const KpisPage = lazy(() => import("./pages/dashboard/KpisPage"));
@@ -78,97 +85,92 @@ function Loading() {
   );
 }
 
+const PATH_TO_PAGE: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
+  "dashboard/overview": OverviewPage,
+  "dashboard/kpis": KpisPage,
+  "dashboard/activity-feed": ActivityFeedPage,
+  "dashboard/alerts": AlertsPage,
+  "sales/leads": LeadsPage,
+  "sales/opportunities": OpportunitiesPage,
+  "sales/deals": DealsPage,
+  "sales/quotes": QuotesPage,
+  "sales/contracts": ContractsPage,
+  "sales/orders": OrdersPage,
+  "customers/accounts": AccountsPage,
+  "customers/contacts": ContactsPage,
+  "customers/profiles": ProfilesPage,
+  "customers/ai-content": AIContentPage,
+  "customers/interaction-history": InteractionHistoryPage,
+  "customers/support-tickets": SupportTicketsPage,
+  "inventory/products": ProductsPage,
+  "inventory/categories": CategoriesPage,
+  "inventory/stock-levels": StockLevelsPage,
+  "inventory/warehouses": WarehousesPage,
+  "inventory/suppliers": SuppliersPage,
+  "operations/order-fulfillment": OrderFulfillmentPage,
+  "operations/shipping": ShippingPage,
+  "operations/returns": ReturnsPage,
+  "operations/invoicing": InvoicingPage,
+  "finance/invoices": InvoicesPage,
+  "finance/payments": PaymentsPage,
+  "finance/pricing-rules": PricingRulesPage,
+  "finance/taxes": TaxesPage,
+  "reports/analytics": AnalyticsPage,
+  "reports/sales-reports": SalesReportsPage,
+  "reports/customer-insights": CustomerInsightsPage,
+  "reports/inventory-reports": InventoryReportsPage,
+  "reports/financial-reports": FinancialReportsPage,
+  "reports/custom-reports": CustomReportsPage,
+  "automation/workflows": WorkflowsPage,
+  "automation/ai-campaigns": AICampaignsPage,
+  "automation/triggers": TriggersPage,
+  "automation/webhooks": WebhooksPage,
+  "automation/integrations": IntegrationsPage,
+  "ai-marketing/video": AIVideoPage,
+  "ai-marketing/distribution": DistributionPage,
+  "administration/users": AdminUsersPage,
+  "administration/permissions": PermissionsPage,
+  "administration/teams": AdminTeamsPage,
+  "administration/audit-logs": AuditLogsPage,
+  "administration/system-settings": SystemSettingsPage,
+  "settings/organization": OrganizationPage,
+  "settings/custom-fields": CustomFieldsPage,
+  "settings/pipelines": PipelinesPage,
+  "settings/notifications": NotificationsPage,
+  "settings/api-keys": ApiKeysPage,
+};
+
+function CRMContent() {
+  const { pathname } = useLocation();
+  const path = crmPathFromLocation(pathname);
+  const Page = PATH_TO_PAGE[path] ?? PATH_TO_PAGE["dashboard/overview"];
+  return (
+    <Suspense fallback={<Loading />}>
+      <Page />
+    </Suspense>
+  );
+}
+
 function CRMRoutes() {
   return (
     <Routes>
+      <Route path="/crm" element={<Navigate to="/crm/dashboard/overview" replace />} />
       <Route
-        path="/crm"
+        path="/crm/*"
         element={
           <CRMPageLayout title="CRM">
-            <Suspense fallback={<Loading />}>
-              <Outlet />
-            </Suspense>
+            <CRMContent />
           </CRMPageLayout>
         }
-      >
-        <Route index element={<Navigate to="dashboard/overview" replace />} />
-        <Route path="dashboard" element={<Navigate to="overview" replace />} />
-        <Route path="dashboard/overview" element={<OverviewPage />} />
-        <Route path="dashboard/kpis" element={<KpisPage />} />
-        <Route path="dashboard/activity-feed" element={<ActivityFeedPage />} />
-        <Route path="dashboard/alerts" element={<AlertsPage />} />
-
-        <Route path="sales" element={<Navigate to="leads" replace />} />
-        <Route path="sales/leads" element={<LeadsPage />} />
-        <Route path="sales/opportunities" element={<OpportunitiesPage />} />
-        <Route path="sales/deals" element={<DealsPage />} />
-        <Route path="sales/quotes" element={<QuotesPage />} />
-        <Route path="sales/contracts" element={<ContractsPage />} />
-        <Route path="sales/orders" element={<OrdersPage />} />
-
-        <Route path="customers" element={<Navigate to="accounts" replace />} />
-        <Route path="customers/accounts" element={<AccountsPage />} />
-        <Route path="customers/contacts" element={<ContactsPage />} />
-        <Route path="customers/profiles" element={<ProfilesPage />} />
-        <Route path="customers/ai-content" element={<AIContentPage />} />
-        <Route path="customers/interaction-history" element={<InteractionHistoryPage />} />
-        <Route path="customers/support-tickets" element={<SupportTicketsPage />} />
-
-        <Route path="inventory" element={<Navigate to="products" replace />} />
-        <Route path="inventory/products" element={<ProductsPage />} />
-        <Route path="inventory/categories" element={<CategoriesPage />} />
-        <Route path="inventory/stock-levels" element={<StockLevelsPage />} />
-        <Route path="inventory/warehouses" element={<WarehousesPage />} />
-        <Route path="inventory/suppliers" element={<SuppliersPage />} />
-
-        <Route path="operations" element={<Navigate to="order-fulfillment" replace />} />
-        <Route path="operations/order-fulfillment" element={<OrderFulfillmentPage />} />
-        <Route path="operations/shipping" element={<ShippingPage />} />
-        <Route path="operations/returns" element={<ReturnsPage />} />
-        <Route path="operations/invoicing" element={<InvoicingPage />} />
-
-        <Route path="finance" element={<Navigate to="invoices" replace />} />
-        <Route path="finance/invoices" element={<InvoicesPage />} />
-        <Route path="finance/payments" element={<PaymentsPage />} />
-        <Route path="finance/pricing-rules" element={<PricingRulesPage />} />
-        <Route path="finance/taxes" element={<TaxesPage />} />
-
-        <Route path="reports" element={<Navigate to="analytics" replace />} />
-        <Route path="reports/analytics" element={<AnalyticsPage />} />
-        <Route path="reports/sales-reports" element={<SalesReportsPage />} />
-        <Route path="reports/customer-insights" element={<CustomerInsightsPage />} />
-        <Route path="reports/inventory-reports" element={<InventoryReportsPage />} />
-        <Route path="reports/financial-reports" element={<FinancialReportsPage />} />
-        <Route path="reports/custom-reports" element={<CustomReportsPage />} />
-
-        <Route path="automation" element={<Navigate to="workflows" replace />} />
-        <Route path="automation/workflows" element={<WorkflowsPage />} />
-        <Route path="automation/ai-campaigns" element={<AICampaignsPage />} />
-        <Route path="automation/triggers" element={<TriggersPage />} />
-        <Route path="automation/webhooks" element={<WebhooksPage />} />
-        <Route path="automation/integrations" element={<IntegrationsPage />} />
-
-        <Route path="ai-marketing" element={<Navigate to="video" replace />} />
-        <Route path="ai-marketing/video" element={<AIVideoPage />} />
-        <Route path="ai-marketing/distribution" element={<DistributionPage />} />
-
-        <Route path="administration" element={<Navigate to="users" replace />} />
-        <Route path="administration/users" element={<AdminUsersPage />} />
-        <Route path="administration/permissions" element={<PermissionsPage />} />
-        <Route path="administration/teams" element={<AdminTeamsPage />} />
-        <Route path="administration/audit-logs" element={<AuditLogsPage />} />
-        <Route path="administration/system-settings" element={<SystemSettingsPage />} />
-
-        <Route path="settings" element={<Navigate to="organization" replace />} />
-        <Route path="settings/organization" element={<OrganizationPage />} />
-        <Route path="settings/custom-fields" element={<CustomFieldsPage />} />
-        <Route path="settings/pipelines" element={<PipelinesPage />} />
-        <Route path="settings/notifications" element={<NotificationsPage />} />
-        <Route path="settings/api-keys" element={<ApiKeysPage />} />
-
-        <Route path="*" element={<Navigate to="dashboard/overview" replace />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/crm/dashboard/overview" replace />} />
+      />
+      <Route
+        path="*"
+        element={
+          <CRMPageLayout title="CRM">
+            <CRMContent />
+          </CRMPageLayout>
+        }
+      />
     </Routes>
   );
 }

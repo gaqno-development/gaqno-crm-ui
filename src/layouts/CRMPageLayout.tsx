@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PageLayout, type PageLayoutTab, type PageLayoutTabGroup } from "@gaqno-development/frontcore/components/layout";
+import { PageLayout, type PageLayoutTab } from "@gaqno-development/frontcore/components/layout";
 import { useTranslation } from "@gaqno-development/frontcore/i18n";
 import {
   LayoutDashboard,
@@ -32,17 +32,13 @@ const TAB_KEYS = [
   { id: "settings", href: "/crm/settings/organization", icon: <GearIcon className="h-4 w-4" />, tKey: "crm.settings" },
 ] as const;
 
-const GROUP_CONFIG = [
-  { groupKey: "crm.groupOverview", tabIds: ["dashboard"] },
-  { groupKey: "crm.groupBusiness", tabIds: ["sales", "customers", "inventory", "operations", "finance"] },
-  { groupKey: "crm.groupInsights", tabIds: ["reports", "automation", "ai-marketing"] },
-  { groupKey: "crm.groupAdministration", tabIds: ["administration", "settings"] },
-] as const;
-
 function getActiveSection(pathname: string): string {
+  const rest = pathname.startsWith("/crm")
+    ? pathname.slice("/crm".length).replace(/^\/+/, "")
+    : pathname.replace(/^\/+/, "");
   const sections = TAB_KEYS.map((t) => t.id);
   for (const section of sections) {
-    if (pathname.startsWith(`/crm/${section}`)) return section;
+    if (rest === section || rest.startsWith(`${section}/`)) return section;
   }
   return "dashboard";
 }
@@ -65,11 +61,6 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
     href: tab.href,
   }));
 
-  const tabGroups: PageLayoutTabGroup[] = GROUP_CONFIG.map((group) => ({
-    label: t(group.groupKey),
-    tabs: group.tabIds.map((id) => tabs.find((tab) => tab.id === id)!),
-  }));
-
   const handleTabChange = (tabId: string) => {
     const tab = TAB_KEYS.find((k) => k.id === tabId);
     if (tab) navigate(tab.href);
@@ -79,7 +70,6 @@ export function CRMPageLayout({ children, title }: CRMPageLayoutProps) {
     <PageLayout
       title={title ?? t("crm.title")}
       tabs={tabs}
-      tabGroups={tabGroups}
       activeTab={activeTab}
       onTabChange={handleTabChange}
       layoutId="crmActiveTab"
