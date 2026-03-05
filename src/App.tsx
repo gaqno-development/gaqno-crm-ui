@@ -12,6 +12,8 @@ const CRM_DEFAULT_VIEW = "dashboard/overview";
 
 function crmPathFromLocation(pathname: string): string {
   const normalized = pathname.replace(/\/+$/, "").replace(/^\/+/, "");
+  if (normalized === "crm") return CRM_DEFAULT_VIEW;
+  if (normalized.startsWith("crm/")) return normalized.slice(4) || CRM_DEFAULT_VIEW;
   const crmIndex = normalized.indexOf(CRM_SEGMENT);
   const rest =
     crmIndex >= 0

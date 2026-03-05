@@ -25,7 +25,7 @@ const TAB_KEYS = [
   { id: "inventory", href: "/crm/inventory/products", icon: <Package className="h-4 w-4" />, tKey: "crm.inventory" },
   { id: "operations", href: "/crm/operations/order-fulfillment", icon: <ClipboardList className="h-4 w-4" />, tKey: "crm.operations" },
   { id: "finance", href: "/crm/finance/invoices", icon: <DollarSign className="h-4 w-4" />, tKey: "crm.finance" },
-  { id: "reports", href: "/crm/reports/analytics", icon: <BarChart3 className="h-4 w-4" />, tKey: "crm.performance" },
+  { id: "reports", href: "/crm/reports/analytics", icon: <BarChart3 className="h-4 w-4" />, tKey: "crm.reports" },
   { id: "automation", href: "/crm/automation/workflows", icon: <TargetIcon className="h-4 w-4" />, tKey: "crm.automation" },
   { id: "ai-marketing", href: "/crm/ai-marketing/video", icon: <Sparkles className="h-4 w-4" />, tKey: "crm.aiMarketing" },
   { id: "administration", href: "/crm/administration/users", icon: <ShieldCheck className="h-4 w-4" />, tKey: "crm.administration" },
@@ -36,11 +36,16 @@ const CRM_SEGMENT = "/crm";
 
 function getActiveSection(pathname: string): string {
   const normalized = pathname.replace(/\/+$/, "").replace(/^\/+/, "");
-  const crmIndex = normalized.indexOf(CRM_SEGMENT);
-  const rest =
-    crmIndex >= 0
-      ? normalized.slice(crmIndex + CRM_SEGMENT.length).replace(/^\/+/, "")
-      : normalized;
+  let rest: string;
+  if (normalized === "crm") rest = "";
+  else if (normalized.startsWith("crm/")) rest = normalized.slice(4);
+  else {
+    const crmIndex = normalized.indexOf(CRM_SEGMENT);
+    rest =
+      crmIndex >= 0
+        ? normalized.slice(crmIndex + CRM_SEGMENT.length).replace(/^\/+/, "")
+        : normalized;
+  }
   const sections = TAB_KEYS.map((t) => t.id);
   for (const section of sections) {
     if (rest === section || rest.startsWith(`${section}/`)) return section;
