@@ -32,7 +32,17 @@ export interface Webhook {
 export interface Integration {
   id: string;
   name: string;
-  type?: string;
-  enabled: boolean;
+  provider: "pipedrive" | "salesforce";
+  connected: boolean;
+  lastSyncAt: string | null;
+  lastSyncError: string | null;
   updatedAt: string;
+  type?: string;
+  enabled?: boolean;
+}
+
+export interface SyncResult {
+  triggered: boolean;
+  provider: string;
+  lastSyncAt: string;
 }

@@ -48,15 +48,23 @@ export const WEBHOOKS_COLUMNS: ColumnDef<Webhook>[] = [
 
 export const INTEGRATIONS_COLUMNS: ColumnDef<Integration>[] = [
   { accessorKey: "name", header: "Nome", cell: ({ row }) => <span className="font-medium text-sm">{row.original.name}</span> },
-  { accessorKey: "type", header: "Tipo", cell: ({ row }) => <span className="text-xs text-muted-foreground">{row.original.type ?? "—"}</span> },
+  { accessorKey: "provider", header: "Provedor", cell: ({ row }) => <span className="text-xs text-muted-foreground capitalize">{row.original.provider}</span> },
   {
-    accessorKey: "enabled",
-    header: "Ativo",
+    accessorKey: "connected",
+    header: "Status",
     cell: ({ row }) => (
-      <span className={cn("text-xs", row.original.enabled ? "text-green-600" : "text-muted-foreground")}>
-        {row.original.enabled ? "Sim" : "Não"}
+      <span className={cn("text-xs font-medium", row.original.connected ? "text-green-600" : "text-muted-foreground")}>
+        {row.original.connected ? "Conectado" : "Desconectado"}
       </span>
     ),
   },
-  { accessorKey: "updatedAt", header: "Atualizado", cell: ({ row }) => <span className="text-xs text-muted-foreground">{formatDate(row.original.updatedAt, { day: "2-digit", month: "short" })}</span> },
+  {
+    accessorKey: "lastSyncAt",
+    header: "Última sincronização",
+    cell: ({ row }) => (
+      <span className="text-xs text-muted-foreground">
+        {row.original.lastSyncAt ? formatDate(row.original.lastSyncAt, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "—"}
+      </span>
+    ),
+  },
 ];
