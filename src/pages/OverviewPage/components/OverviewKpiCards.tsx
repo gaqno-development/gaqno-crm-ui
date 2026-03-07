@@ -8,7 +8,7 @@ export interface OverviewKpiCardsProps {
 
 export function OverviewKpiCards({ cards, isLoading }: OverviewKpiCardsProps) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div data-testid="overview-kpi-cards" className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {cards.map(({ title, value, description, icon: Icon }) => (
         <StatCard
           key={title}

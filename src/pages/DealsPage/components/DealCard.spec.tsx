@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import { vi } from "vitest";
 import { DealCard } from "./DealCard";
 import type { Deal } from "../../../../types/crm";
 
@@ -28,8 +29,9 @@ const proposalDeal: Deal = {
 describe("DealCard", () => {
   it("renders deal name and company", () => {
     render(<DealCard deal={negotiationDeal} />);
-    expect(screen.getByText("Test Deal")).toBeInTheDocument();
-    expect(screen.getByText("Company Ltda")).toBeInTheDocument();
+    expect(screen.getByTestId("deal-card")).toBeInTheDocument();
+    expect(screen.getByTestId("deal-name")).toHaveTextContent("Test Deal");
+    expect(screen.getByTestId("deal-company")).toHaveTextContent("Company Ltda");
   });
 
   it("when stage is negotiation and onMarkWon provided, shows Won button that calls onMarkWon with deal id", () => {
@@ -37,7 +39,7 @@ describe("DealCard", () => {
     render(
       <DealCard deal={negotiationDeal} onMarkWon={onMarkWon} onMarkLost={vi.fn()} />
     );
-    const wonButton = screen.getByRole("button", { name: /won/i });
+    const wonButton = screen.getByTestId("deal-won-btn");
     fireEvent.click(wonButton);
     expect(onMarkWon).toHaveBeenCalledWith("d2");
   });
@@ -47,7 +49,7 @@ describe("DealCard", () => {
     render(
       <DealCard deal={negotiationDeal} onMarkWon={vi.fn()} onMarkLost={onMarkLost} />
     );
-    const lostButton = screen.getByRole("button", { name: /lost/i });
+    const lostButton = screen.getByTestId("deal-lost-btn");
     fireEvent.click(lostButton);
     expect(onMarkLost).toHaveBeenCalledWith("d2");
   });
@@ -60,7 +62,7 @@ describe("DealCard", () => {
         onMarkLost={vi.fn()}
       />
     );
-    expect(screen.queryByRole("button", { name: /won/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /lost/i })).not.toBeInTheDocument();
+    expect(screen.queryByTestId("deal-won-btn")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("deal-lost-btn")).not.toBeInTheDocument();
   });
 });

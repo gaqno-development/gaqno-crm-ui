@@ -1,11 +1,32 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
+
+const localStorageMock = {
+  getItem: vi.fn(() => null),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
+Object.defineProperty(globalThis, "localStorage", { value: localStorageMock, writable: true });
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "localStorage", { value: localStorageMock, writable: true });
+}
 import {
   MOCK_LEADS,
   MOCK_CONTACTS,
   MOCK_DEALS,
   MOCK_INTERACTIONS,
 } from "../lib/crm-mock-data";
+
+vi.mock("@gaqno-development/frontcore/i18n", () => ({
+  useTranslation: () => ({ t: (k: string) => k, i18n: {} }),
+}));
+
+vi.mock("react-router-dom", () => ({
+  ...vi.importActual("react-router-dom"),
+  useNavigate: () => vi.fn(),
+  useLocation: () => ({ pathname: "/", search: "", hash: "", state: null }),
+}));
 
 const mockGet = vi.fn((url: string) => {
   if (url.startsWith("/leads")) return Promise.resolve({ data: MOCK_LEADS });

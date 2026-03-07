@@ -12,11 +12,19 @@ export function DealCard({ deal, onMarkWon, onMarkLost }: DealCardProps) {
     deal.stage === "negotiation" && (onMarkWon != null || onMarkLost != null);
 
   return (
-    <div className="bg-card border border-border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer group">
-      <p className="font-medium text-sm leading-tight group-hover:text-primary transition-colors">
+    <div
+      className="bg-card border border-border rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+      data-testid="deal-card"
+    >
+      <p
+        className="font-medium text-sm leading-tight group-hover:text-primary transition-colors"
+        data-testid="deal-name"
+      >
         {deal.name}
       </p>
-      <p className="text-xs text-muted-foreground mt-0.5">{deal.company}</p>
+      <p className="text-xs text-muted-foreground mt-0.5" data-testid="deal-company">
+        {deal.company}
+      </p>
       <div className="flex items-center justify-between mt-2.5">
         <span className="text-sm font-bold text-foreground">
           {formatCurrency(deal.value)}
@@ -44,6 +52,7 @@ export function DealCard({ deal, onMarkWon, onMarkLost }: DealCardProps) {
               }}
               className="text-[10px] font-medium px-2 py-1 rounded bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800/50 transition-colors"
               aria-label="Mark as won"
+              data-testid="deal-won-btn"
             >
               Won
             </button>
@@ -57,6 +66,7 @@ export function DealCard({ deal, onMarkWon, onMarkLost }: DealCardProps) {
               }}
               className="text-[10px] font-medium px-2 py-1 rounded bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800/50 transition-colors"
               aria-label="Mark as lost"
+              data-testid="deal-lost-btn"
             >
               Lost
             </button>

@@ -29,6 +29,7 @@ export function DealsStageColumn({
 
   return (
     <div
+      data-testid={`deals-stage-${stage}`}
       className={cn(
         "flex-shrink-0 w-64 flex flex-col rounded-xl border-2 overflow-hidden",
         color
@@ -61,7 +62,10 @@ export function DealsStageColumn({
           />
         ))}
         {deals.length === 0 && (
-          <div className="flex-1 flex items-center justify-center text-xs text-muted-foreground/50 italic py-6">
+          <div
+            data-testid="deals-stage-empty"
+            className="flex-1 flex items-center justify-center text-xs text-muted-foreground/50 italic py-6"
+          >
             No deals
           </div>
         )}
